@@ -8,6 +8,8 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  String email = '';
+  String password = '';
 
   Widget build(context) {
     return Container(
@@ -32,6 +34,15 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'Email Address',
         hintText: 'you@example.com',
       ),
+      // ignore: missing_return
+      validator: (String value) {
+        if (!value.contains('@')) {
+          return 'Please enter a valid email';
+        }
+      },
+      onSaved: (String value) {
+        email = value;
+      },
     );
   }
 
@@ -42,14 +53,28 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'Password',
         hintText: 'Password',
       ),
+      // ignore: missing_return
+      validator: (String value) {
+        if (value.length < 4) {
+          return 'Please enter a valid Password';
+        }
+      },
+      onSaved: (String value) {
+        password = value;
+      },
     );
   }
 
   Widget submitButton() {
     return RaisedButton(
       color: Colors.blue,
-      onPressed: () => {},
-      child: Text('Submit'),
+      child: Text('Submit!'),
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          print('Time to post $email and $password to my API!');
+        }
+      },
     );
   }
 }
